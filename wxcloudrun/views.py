@@ -4,7 +4,7 @@ from run import app
 from wxcloudrun.dao import delete_counterbyid, query_counterbyid, insert_counter, update_counterbyid
 from wxcloudrun.model import Counters
 from wxcloudrun.response import make_succ_empty_response, make_succ_response, make_err_response
-
+import requests
 
 @app.route('/')
 def index():
@@ -27,9 +27,12 @@ def count():
     if 'action' not in params:
         return make_err_response('缺少action参数')
 
+    result = requests.get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxe47eb058374da340&secret=ea928d53c46b66e4dc2e5d6458e9ddef")
+
+    return make_succ_response(result)
     # 按照不同的action的值，进行不同的操作
     action = params['action']
-
+    
     # 执行自增操作
     if action == 'inc':
         counter = query_counterbyid(1)
